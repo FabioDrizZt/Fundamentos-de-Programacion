@@ -5,8 +5,7 @@ const temperatura = 18
 if (temperatura > 20) {
   console.log("Hace calor")
   console.log("Usar anteojos de sol!")
-}
-if (temperatura <= 20) { // !(temperatura > 20)
+} else {
   console.log("Hace frio")
   console.log("Usar bufanda!")
 }
