@@ -14,5 +14,5 @@ const edad = 17
   ? "Eres mayor de edad"
   : "Eres menor de edad" */
 
-const mensaje = `Eres ${edad>=18 ? "mayor" : "menor"} de edad`
+const mensaje = `Eres ${edad >= 18 ? 'mayor' : 'menor'} de edad`
 console.log(mensaje)

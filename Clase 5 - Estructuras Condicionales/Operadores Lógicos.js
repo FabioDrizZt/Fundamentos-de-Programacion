@@ -38,7 +38,6 @@ const esFinDeSemana = true
 const estoyDeVacaciones = true
 console.log(esFinDeSemana || estoyDeVacaciones) // true
 
-
 // !: NOT lógico
 // Devuelve true si el operando es falso, y viceversa
 console.log(!true) // false

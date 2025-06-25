@@ -1,4 +1,4 @@
-const prompt = require("prompt-sync")();
+const prompt = require('prompt-sync')()
 // Mostrar solo los numeros impares entre 1 y 100
 /* for (let i = 1; i <= 100; i += 2) {
   console.log(i);
@@ -37,21 +37,21 @@ if (accesoConcedido) {
 } */
 
 // Adivinar el numero secreto
-const numeroSecreto = Math.floor(Math.random() * (10 - 1)) + 1;
-const maxIntentos = 3;
+const numeroSecreto = Math.floor(Math.random() * (10 - 1)) + 1
+const maxIntentos = 3
 for (let intentos = 1; intentos <= maxIntentos; intentos++) {
-  const numero = parseInt(prompt(`Adivine el número secreto:`));
+  const numero = parseInt(prompt('Adivine el número secreto:'))
   if (isNaN(numero)) {
-    console.log("El número ingresado no es un número");
-    continue;
+    console.log('El número ingresado no es un número')
+    continue
   }
- 
+
   if (numero === numeroSecreto) {
-    console.log("¡Ganaste! El número secreto es " + numero);
-    break;
+    console.log('¡Ganaste! El número secreto es ' + numero)
+    break
   } else if (numeroSecreto > numero) {
-    console.log("El número secreto es mayor");
+    console.log('El número secreto es mayor')
   } else {
-    console.log("El número secreto es menor");
+    console.log('El número secreto es menor')
   }
 }
