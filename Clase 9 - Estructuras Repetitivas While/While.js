@@ -1,3 +1,10 @@
+let vuelta = 1
+while (vuelta <= 5) {
+  console.log('Dando la vuelta número ' + vuelta);
+  vuelta++
+}
+
+
 let index = 1
 let suma = 0
 let contador = 0
