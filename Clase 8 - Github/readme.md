@@ -223,4 +223,3 @@ Pon en práctica lo aprendido creando un repositorio, trabajando con ramas, reso
 ---
 
 > **Recuerda:** La práctica constante y la colaboración son claves para dominar Git y GitHub. ¡Sigue experimentando y aprendiendo! 💡
-

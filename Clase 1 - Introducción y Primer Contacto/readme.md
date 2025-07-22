@@ -136,5 +136,3 @@ La **BIOS** (Sistema Básico de Entrada/Salida) es un firmware almacenado en un 
 5. ¿En qué se diferencia una GPU de una CPU?
 
 > 💡 **Reflexiona:** ¿Cómo crees que evolucionarán los componentes de las computadoras en el futuro?
-
-

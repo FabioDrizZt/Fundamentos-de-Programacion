@@ -161,5 +161,3 @@ console.log("Expo: " + calculadora((a, b) => a ** b, 2, 3));
 Este patrón es increíblemente flexible y potente.
 
 ---
-
-¡Felicidades! Has cubierto los fundamentos esenciales de las funciones en JavaScript. Entender y dominar estos conceptos es un gran paso para convertirte en un desarrollador competente. ¡Ahora, a practicar! 💻

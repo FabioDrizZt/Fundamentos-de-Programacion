@@ -115,4 +115,3 @@ Los bucles se vuelven aún más poderosos cuando los combinamos con estructuras 
 
 ---
 
-¡Felicidades! Has completado una inmersión profunda en los bucles `for`. Entender sus diferentes variantes y cómo combinarlos con condicionales te da un control enorme sobre el flujo de tus programas. ¡Sigue practicando con los ejemplos! 🚀

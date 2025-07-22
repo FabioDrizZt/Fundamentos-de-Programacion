@@ -173,5 +173,3 @@ console.log('Vaso:', vaso); // cerveza
 - ¡Experimenta y no tengas miedo de equivocarte!
 
 > 💬 **¿Listo para escribir tus primeros programas en JavaScript?**
-
-
