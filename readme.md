@@ -28,6 +28,14 @@
     - Bucles `for`, `for...in` y `for...of` para iterar sobre secuencias y objetos.
 11. [🧩 Clase 11 - Funciones](./Clase%2011%20-%20Funciones/)
     - Declaración, parámetros, retorno, alcance y funciones flecha en JavaScript.
+12. [🔢 Clase 12 - Arrays](./Clase%2012%20-%20Arrays/)
+    - Creación, acceso y métodos para manipular arrays, como `push`, `pop`, `slice`, `sort` y `reverse`.
+13. [🧱 Clase 13 - Objetos](./Clase%2013%20-%20Objetos/)
+    - Trabajo con objetos literales, constructores, prototipos, clases y arrays de objetos.
+14. [⚙️ Clase 14 - Métodos Avanzados de Arrays](./Clase%2014%20-%20Metodos%20Avanzados%20de%20Arrays/)
+    - Uso de `forEach`, `map`, `filter`, `reduce`, `find`, `some` y `sort` para un manejo de datos más eficiente.
+15. [🌐 Clase 15 - Manipulación de HTML con JavaScript](./Clase%2015%20-%20Manipulación%20de%20HTML/)
+    - Interacción con el DOM, manejo de eventos y creación de contenido dinámico en páginas web.
 
 ---
 
