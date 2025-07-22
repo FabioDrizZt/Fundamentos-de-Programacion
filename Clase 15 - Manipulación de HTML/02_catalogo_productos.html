@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Catalogo de productos</title>
+    <style>
+      /* Estilos simples para las tarjetas de productos, complementando Pico.css */
+      .card {
+        border: 1px solid var(--pico-form-element-active-border-color);
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        border-radius: var(--pico-border-radius);
+        background-color: var(--pico-card-background-color);
+        box-shadow: var(--pico-box-shadow);
+      }
+      .card h3 {
+        margin-top: 0;
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+    <script src="./02_catalogo_productos.js" defer></script>
+  </head>
+  <body>
+    <main class="container">
+      <h1>Nuestro catalogo de productos</h1>
+      <div class="productos-container">
+        <p>Cargando productos...</p>
+      </div>
+    </main>
+  </body>
+</html>

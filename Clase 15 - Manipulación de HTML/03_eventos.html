@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Catalogo de productos</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+    <style>
+      /* Estilos para el área interactiva */
+      #interactive-area {
+        width: 100%;
+        height: 150px;
+        background-color: var(--pico-neutral-200);
+        border: 2px dashed var(--pico-primary);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 1rem 0;
+        text-align: center;
+        transition: background-color 0.1s ease-out; /* Transición suave para mousemove */
+      }
+      .status-message {
+        margin-top: 0.5rem;
+        font-weight: bold;
+      }
+    </style>
+    <script src="./03_eventos.js" defer></script>
+  </head>
+  <body>
+    <main class="container">
+      <h1>Manejo de Eventos con JavaScript</h1>
+
+      <section>
+        <h2>Eventos de Clic</h2>
+        <button id="my-event-button">Haz Clic Aquí</button>
+        <p>Conteo de clics: <span id="click-count">0</span></p>
+      </section>
+
+      <section>
+        <h2>Eventos del Ratón (Mouse Events)</h2>
+        <div id="interactive-area">
+          Mueve el ratón, haz clic, doble clic o clic derecho aquí.
+        </div>
+        <p id="mouse-position">Posición: --</p>
+        <p id="click-status" class="status-message"></p>
+        <p id="double-click-status" class="status-message"></p>
+      </section>
+
+      <section>
+        <h2>Eventos del Teclado (Keyboard Events)</h2>
+        <label for="text-input-field">Escribe algo:</label>
+        <input
+          type="text"
+          id="text-input-field"
+          placeholder="Empieza a escribir..."
+        />
+        <p id="last-key-pressed">Última tecla presionada: --</p>
+        <p id="typed-text-display">Texto actual:</p>
+      </section>
+    </main>
+  </body>
+</html>
