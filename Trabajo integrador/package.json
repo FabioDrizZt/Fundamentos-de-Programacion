@@ -1,0 +1,26 @@
+{
+  "name": "sistema-gestion-tienda",
+  "version": "1.0.0",
+  "description": "Sistema de gestión de tienda desarrollado en JavaScript - Trabajo Integrador Final",
+  "main": "sistema-tienda.js",
+  "scripts": {
+    "start": "node sistema-tienda.js",
+    "dev": "node --watch sistema-tienda.js"
+  },
+  "keywords": [
+    "javascript",
+    "nodejs",
+    "tienda",
+    "gestion",
+    "fundamentos",
+    "programacion"
+  ],
+  "author": "Estudiante",
+  "license": "MIT",
+  "dependencies": {
+    "prompt-sync": "^4.2.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+} 
