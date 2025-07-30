@@ -115,7 +115,13 @@ function menuLibros() {
 }
 
 function listarLibros() {
-  console.log("🚧 Función en desarrollo...");
+  console.log("Listado de libros:")
+  console.log("===================")
+  if (libros.length === 0) {
+    console.log("❌ No hay libros registrados en el sistema.");
+  } else {
+    libros.forEach(libro => console.log(libro.mostrarInfo()));
+  }
   funciones.pausar();
 }
 
