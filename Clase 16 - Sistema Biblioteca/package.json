@@ -1,0 +1,26 @@
+{
+  "name": "sistema-biblioteca",
+  "version": "1.0.0",
+  "description": "Sistema de gestión de biblioteca en JavaScript - Trabajo Integrador",
+  "main": "sistema-biblioteca.js",
+  "scripts": {
+    "start": "node sistema-biblioteca.js",
+    "dev": "node --watch sistema-biblioteca.js"
+  },
+  "keywords": [
+    "javascript",
+    "nodejs",
+    "biblioteca",
+    "gestion",
+    "fundamentos",
+    "programacion"
+  ],
+  "author": "Profesor Fabio Argañaraz",
+  "license": "MIT",
+  "dependencies": {
+    "prompt-sync": "^4.2.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+} 
