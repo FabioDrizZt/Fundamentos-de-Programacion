@@ -14,7 +14,7 @@ class Libro {
 
   mostrarInfo() {
     const estado = this.disponibles > 0 ? "✅ Disponible" : "❌ No disponible";
-    return `\n${this.id}. ${this.titulo} por ${this.autor}. \nCategoria: ${this.categoria}\nEstado: ${estado}.\nTotal disponibles: ${this.disponibles}.\nTotal prestados: ${this.total}`;
+    return `\n${this.id}. ${this.titulo} por ${this.autor}. \nCategoria: ${this.categoria}\nEstado: ${estado}.\nTotal disponibles: ${this.disponibles}.\nTotal prestados: ${this.total - this.disponibles}`;
   }
 }
 

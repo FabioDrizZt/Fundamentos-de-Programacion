@@ -1,5 +1,6 @@
 const prompt = require('prompt-sync')({ sigint: true });
 const funciones = require('./funciones.js');
+const { Libro, Usuario, Prestamo } = require('./clases.js');
 const {
     cargarLibrosIniciales,
     cargarUsuariosIniciales,
@@ -157,7 +158,29 @@ function buscarLibros() {
 }
 
 function agregarLibros() {
-  console.log("🚧 Función en desarrollo...");
+  console.log("\n➕ AGREGAR LIBRO:");
+  console.log("=================");
+
+  // Solicitar datos: titulo, autor, categoria, total
+  let titulo, autor, categoria, total;
+  do {
+    titulo = prompt("Introduce el título del libro: ");
+  } while (!funciones.validarTitulo(titulo));
+  do {
+    autor = prompt("Introduce el autor del libro: ");
+  } while (!funciones.validarAutor(autor));
+  do {
+    categoria = prompt("Introduce la categoria del libro: ");
+  } while (!funciones.validarCategoria(categoria));
+  do {
+    total = prompt("Introduce el total de libros disponibles: ");
+  } while (!funciones.validarTotal(total));
+
+  const nuevoID = libros.length + 1;
+  const nuevoLibro = new Libro(nuevoID, titulo, autor, categoria, total, total)
+  libros.push(nuevoLibro);
+  console.log("Libro agregado con éxito.");
+  console.log(nuevoLibro.mostrarInfo());
   funciones.pausar();
 }
 
