@@ -126,7 +126,33 @@ function listarLibros() {
 }
 
 function buscarLibros() {
-  console.log("🚧 Función en desarrollo...");
+  console.log('Buscar Libros:')
+  console.log("================")
+  console.log('1. Buscar por titulo')
+  console.log('2. Buscar por categoria')
+  const tipo = prompt("Seleccione tipo de búsqueda: ");
+  let resultados = []
+  switch (tipo) {
+    case '1':
+      const titulo = prompt("Introduce el título del libro a buscar: ");
+      resultados = funciones.buscarLibrosPorTitulo(libros, titulo);
+      break;
+    case '2':
+      console.log('Categorias disponibles: ' + obtenerCategorias().join(', '));
+      const categoria = prompt("Introduce la categoria del libro a buscar: ");
+      resultados = funciones.buscarLibrosPorCategoria(libros, categoria);
+      break;
+    default:
+      console.log("❌ Opción no válida.");
+  }
+
+  if (resultados.length === 0) {
+    console.log("❌ No hay libros que coincidan con la búsqueda.");
+  } else {
+    console.log("Resultados:")
+    console.log("============")
+    resultados.forEach(libro => console.log(libro.mostrarInfo()));
+  }
   funciones.pausar();
 }
 

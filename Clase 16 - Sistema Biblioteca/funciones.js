@@ -3,6 +3,16 @@ function pausar(){
   prompt("Presione Enter para continuar...");
 }
 
+const buscarLibrosPorTitulo = (libros, titulo) => {
+  return libros.filter(libro => libro.titulo.includes(titulo));
+}
+
+const buscarLibrosPorCategoria = (libros, categoria) => {
+  return libros.filter(libro => libro.categoria === categoria);
+}
+
 module.exports = {
-  pausar
+  pausar,
+  buscarLibrosPorTitulo,
+  buscarLibrosPorCategoria
 }
