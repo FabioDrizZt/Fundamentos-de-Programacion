@@ -1,129 +1,172 @@
-const { Libro, Usuario } = require('./clases.js');
+/**
+ * CLASES DEL SISTEMA DE BIBLIOTECA - EJEMPLO SIMPLIFICADO
+ * =======================================================
+ * EJEMPLO RESUELTO PARA ESTUDIANTES
+ * 
+ * Clases simplificadas que muestran los conceptos esenciales
+ */
 
 // ======================================
-// DATOS INICIALES DE LIBROS
+// CLASE LIBRO
 // ======================================
-const librosIniciales = [
-    {
-        id: 1,
-        titulo: "Cien años de soledad",
-        autor: "Gabriel García Márquez",
-        categoria: "Literatura",
-        disponibles: 5,
-        total: 5
-    },
-    {
-        id: 2,
-        titulo: "JavaScript para principiantes",
-        autor: "John Smith",
-        categoria: "Programación",
-        disponibles: 6,
-        total: 6
-    },
-    {
-        id: 3,
-        titulo: "El Quijote",
-        autor: "Miguel de Cervantes",
-        categoria: "Clásicos",
-        disponibles: 3,
-        total: 3
-    },
-    {
-        id: 4,
-        titulo: "Historia de la ciencia",
-        autor: "Carl Sagan",
-        categoria: "Ciencia",
-        disponibles: 2,
-        total: 2
-    },
-    {
-        id: 5,
-        titulo: "El principito",
-        autor: "Antoine de Saint-Exupéry",
-        categoria: "Infantil",
-        disponibles: 7,
-        total: 7
+class Libro {
+    constructor(id, titulo, autor, categoria, disponibles, total) {
+        this.id = id;
+        this.titulo = titulo;
+        this.autor = autor;
+        this.categoria = categoria;
+        this.disponibles = disponibles;
+        this.total = total;
     }
-];
 
-// ======================================
-// DATOS INICIALES DE USUARIOS
-// ======================================
-const usuariosIniciales = [
-    {
-        id: 1,
-        nombre: "Ana García",
-        email: "ana@universidad.edu",
-        tipo: "estudiante"
-    },
-    {
-        id: 2,
-        nombre: "Dr. Carlos López",
-        email: "carlos@universidad.edu",
-        tipo: "profesor"
-    },
-    {
-        id: 3,
-        nombre: "María Rodríguez",
-        email: "maria@estudiante.edu",
-        tipo: "estudiante"
-    },
-    {
-        id: 4,
-        nombre: "Luis Martínez",
-        email: "luis@estudiante.edu",
-        tipo: "estudiante"
+    // Verifica si hay ejemplares disponibles
+    hayDisponible() {
+        return this.disponibles > 0;
     }
-];
+
+    // Presta un ejemplar
+    prestar() {
+        if (this.hayDisponible()) {
+            this.disponibles--;
+            return true;
+        }
+        return false;
+    }
+
+    // Devuelve un ejemplar
+    devolver() {
+        if (this.disponibles < this.total) {
+            this.disponibles++;
+            return true;
+        }
+        return false;
+    }
+
+    // Muestra información del libro
+    mostrarInfo() {
+        const estado = this.hayDisponible() ? "✅ Disponible" : "❌ No disponible";
+        return `📖 ${this.titulo} - ${this.autor}
+   Categoría: ${this.categoria}
+   Disponibles: ${this.disponibles}/${this.total}
+   Estado: ${estado}`;
+    }
+
+    // Información resumida para listas
+    infoResumida() {
+        return `[${this.id}] ${this.titulo} - ${this.autor} (${this.disponibles}/${this.total})`;
+    }
+}
 
 // ======================================
-// CATEGORÍAS Y TIPOS
+// CLASE USUARIO
 // ======================================
-const categoriasDisponibles = [
-    "Literatura",
-    "Programación",
-    "Ciencia",
-    "Historia",
-    "Clásicos",
-    "Infantil"
-];
+class Usuario {
+    constructor(id, nombre, email, tipo = 'estudiante') {
+        this.id = id;
+        this.nombre = nombre;
+        this.email = email;
+        this.tipo = tipo; // 'estudiante', 'profesor'
+        this.prestamosActivos = [];
+    }
 
-const tiposUsuario = [
-    "estudiante",
-    "profesor"
-];
+    // Obtiene el límite de préstamos según el tipo
+    obtenerLimitePrestamos() {
+        return this.tipo === 'profesor' ? 10 : 5;
+    }
 
-function cargarLibrosIniciales() {
-    return librosIniciales.map(libro => new Libro(
-        libro.id,
-        libro.titulo,
-        libro.autor,
-        libro.categoria,
-        libro.disponibles,
-        libro.total
-    ));
+    // Verifica si puede realizar más préstamos
+    puedePrestar() {
+        return this.prestamosActivos.length < this.obtenerLimitePrestamos();
+    }
+
+    // Agrega un préstamo activo
+    agregarPrestamo(prestamo) {
+        this.prestamosActivos.push(prestamo);
+    }
+
+    // Quita un préstamo activo
+    quitarPrestamo(prestamoId) {
+        this.prestamosActivos = this.prestamosActivos.filter(p => p.id !== prestamoId);
+    }
+
+    // Muestra información del usuario
+    mostrarInfo() {
+        return `👤 ${this.nombre}
+   Email: ${this.email}
+   Tipo: ${this.tipo}
+   Préstamos activos: ${this.prestamosActivos.length}/${this.obtenerLimitePrestamos()}`;
+    }
+
+    // Información resumida
+    infoResumida() {
+        return `[${this.id}] ${this.nombre} - ${this.tipo} (${this.prestamosActivos.length} préstamos)`;
+    }
 }
 
-function cargarUsuariosIniciales() {
-    return usuariosIniciales.map(usuario => new Usuario(
-        usuario.id,
-        usuario.nombre,
-        usuario.email,
-        usuario.tipo
-    ));
+// ======================================
+// CLASE PRESTAMO
+// ======================================
+class Prestamo {
+    constructor(id, usuario, libro) {
+        this.id = id;
+        this.usuario = usuario;
+        this.libro = libro;
+        this.fechaPrestamo = new Date();
+        this.fechaLimite = this.calcularFechaLimite();
+        this.estado = 'activo'; // 'activo', 'devuelto'
+    }
+
+    // Calcula la fecha límite (15 días para estudiantes, 30 para profesores)
+    calcularFechaLimite() {
+        const dias = this.usuario.tipo === 'profesor' ? 30 : 15;
+        const fechaLimite = new Date(this.fechaPrestamo);
+        fechaLimite.setDate(fechaLimite.getDate() + dias);
+        return fechaLimite;
+    }
+
+    // Verifica si está vencido
+    estaVencido() {
+        return new Date() > this.fechaLimite && this.estado === 'activo';
+    }
+
+    // Procesa la devolución
+    devolver() {
+        if (this.estado === 'activo') {
+            this.estado = 'devuelto';
+            this.libro.devolver();
+            this.usuario.quitarPrestamo(this.id);
+            return true;
+        }
+        return false;
+    }
+
+    // Genera ticket simple
+    generarTicket() {
+        return `
+================================
+        TICKET DE PRÉSTAMO
+================================
+ID: ${this.id}
+Usuario: ${this.usuario.nombre}
+Libro: ${this.libro.titulo}
+Fecha: ${this.fechaPrestamo.toLocaleDateString()}
+Fecha límite: ${this.fechaLimite.toLocaleDateString()}
+Estado: ${this.estado}
+================================`;
+    }
+
+    // Información resumida
+    infoResumida() {
+        const estadoEmoji = this.estaVencido() ? '🔴' : '🟢';
+        return `${estadoEmoji} [${this.id}] ${this.libro.titulo} → ${this.usuario.nombre}`;
+    }
 }
 
-function obtenerCategorias() {
-    return categoriasDisponibles;
-}
-
-function obtenerTiposUsuario() {
-    return tiposUsuario;
-}
-
+// ======================================
+// EXPORTAR CLASES
+// ======================================
 module.exports = {
-    cargarLibrosIniciales,
-    cargarUsuariosIniciales,
-    obtenerCategorias,
-    obtenerTiposUsuario
-};
+    Libro,
+    Usuario,
+    Prestamo
+}; 

@@ -1,45 +1,226 @@
-const { obtenerCategorias } = require('./datos.js');
+/**
+ * FUNCIONES AUXILIARES - EJEMPLO SIMPLIFICADO
+ * ===========================================
+ * EJEMPLO RESUELTO PARA ESTUDIANTES
+ * 
+ * Funciones esenciales que muestran los conceptos clave
+ */
 
-function pausar(){
-  const prompt = require('prompt-sync')({ sigint: true });
-  prompt("Presione Enter para continuar...");
+// ======================================
+// FUNCIONES DE VALIDACIÓN
+// ======================================
+
+/**
+ * Valida que un texto no esté vacío
+ */
+function validarTexto(texto, minimo = 2) {
+    return texto && texto.trim().length >= minimo;
 }
 
-const buscarLibrosPorTitulo = (libros, titulo) => {
-  return libros.filter(libro => libro.titulo.includes(titulo));
+/**
+ * Valida que un número sea positivo
+ */
+function validarNumeroPositivo(numero) {
+    const num = Number(numero);
+    return !isNaN(num) && num > 0;
 }
 
-const buscarLibrosPorCategoria = (libros, categoria) => {
-  return libros.filter(libro => libro.categoria === categoria);
+/**
+ * Valida formato básico de email
+ */
+function validarEmail(email) {
+    return email && email.includes('@') && email.includes('.');
 }
 
-const validarTitulo = (titulo) => {
-  // validar que el titulo tenga al menos 3 caracteres
-  return titulo.length >= 3;
+// ======================================
+// FUNCIONES DE BÚSQUEDA
+// ======================================
+
+/**
+ * Busca un libro por ID
+ */
+function buscarLibroPorId(libros, id) {
+    return libros.find(libro => libro.id === Number(id)) || null;
 }
 
-const validarAutor = (autor) => {
-  // validar que el autor tenga al menos 3 caracteres
-  return autor.length >= 3;
+/**
+ * Busca libros por título
+ */
+function buscarLibrosPorTitulo(libros, titulo) {
+    return libros.filter(libro => 
+        libro.titulo.toLowerCase().includes(titulo.toLowerCase())
+    );
 }
 
-const validarCategoria = (categoria) => {
-  // validar que la categoria sea una de las disponibles
-  return obtenerCategorias().includes(categoria);
+/**
+ * Busca libros por categoría
+ */
+function buscarLibrosPorCategoria(libros, categoria) {
+    return libros.filter(libro => 
+        libro.categoria.toLowerCase() === categoria.toLowerCase()
+    );
 }
 
-const validarTotal = (total) => {
-  // validar que el total sea un número positivo
-  const num = parseInt(total);
-  return !isNaN(num) && num > 0 && num < 100
+/**
+ * Busca un usuario por ID
+ */
+function buscarUsuarioPorId(usuarios, id) {
+    return usuarios.find(usuario => usuario.id === Number(id)) || null;
 }
 
+/**
+ * Busca usuarios por nombre
+ */
+function buscarUsuariosPorNombre(usuarios, nombre) {
+    return usuarios.filter(usuario => 
+        usuario.nombre.toLowerCase().includes(nombre.toLowerCase())
+    );
+}
+
+/**
+ * Busca préstamo por ID
+ */
+function buscarPrestamoPorId(prestamos, id) {
+    return prestamos.find(prestamo => prestamo.id === Number(id)) || null;
+}
+
+// ======================================
+// FUNCIONES DE CÁLCULO
+// ======================================
+
+/**
+ * Obtiene préstamos activos
+ */
+function obtenerPrestamosActivos(prestamos) {
+    return prestamos.filter(prestamo => prestamo.estado === 'activo');
+}
+
+/**
+ * Obtiene préstamos vencidos
+ */
+function obtenerPrestamosVencidos(prestamos) {
+    return prestamos.filter(prestamo => prestamo.estaVencido());
+}
+
+/**
+ * Obtiene libros disponibles
+ */
+function obtenerLibrosDisponibles(libros) {
+    return libros.filter(libro => libro.hayDisponible());
+}
+
+/**
+ * Cuenta préstamos por usuario
+ */
+function contarPrestamosPorUsuario(prestamos) {
+    const conteo = {};
+    prestamos.forEach(prestamo => {
+        const userId = prestamo.usuario.id;
+        conteo[userId] = (conteo[userId] || 0) + 1;
+    });
+    return conteo;
+}
+
+/**
+ * Obtiene el libro más prestado
+ */
+function obtenerLibroMasPrestado(prestamos) {
+    if (prestamos.length === 0) return null;
+    
+    const conteo = {};
+    prestamos.forEach(prestamo => {
+        const libroId = prestamo.libro.id;
+        conteo[libroId] = (conteo[libroId] || 0) + 1;
+    });
+
+    let maxPrestamos = 0;
+    let libroMasPrestado = null;
+    
+    for (const [libroId, cantidad] of Object.entries(conteo)) {
+        if (cantidad > maxPrestamos) {
+            maxPrestamos = cantidad;
+            libroMasPrestado = prestamos.find(p => p.libro.id === Number(libroId))?.libro;
+        }
+    }
+
+    return { libro: libroMasPrestado, cantidad: maxPrestamos };
+}
+
+// ======================================
+// FUNCIONES DE UTILIDAD
+// ======================================
+
+/**
+ * Pausa la ejecución
+ */
+function pausar(mensaje = "\nPresiona Enter para continuar...") {
+    const prompt = require('prompt-sync')();
+    prompt(mensaje);
+}
+
+/**
+ * Limpia la consola
+ */
+function limpiarConsola() {
+    console.clear();
+}
+
+/**
+ * Capitaliza texto
+ */
+function capitalizarTexto(texto) {
+    return texto.charAt(0).toUpperCase() + texto.slice(1).toLowerCase();
+}
+
+/**
+ * Genera un ID único simple
+ */
+function generarId() {
+    return Date.now() + Math.floor(Math.random() * 100);
+}
+
+/**
+ * Muestra una lista simple
+ */
+function mostrarLista(items, mostrarInfo = (item) => item.toString()) {
+    if (items.length === 0) {
+        console.log("❌ No hay elementos para mostrar.");
+        return;
+    }
+
+    items.forEach((item, index) => {
+        console.log(`${index + 1}. ${mostrarInfo(item)}`);
+    });
+}
+
+// ======================================
+// EXPORTAR FUNCIONES
+// ======================================
 module.exports = {
-  pausar,
-  buscarLibrosPorTitulo,
-  buscarLibrosPorCategoria,
-  validarTitulo,
-  validarAutor,
-  validarCategoria,
-  validarTotal
-}
+    // Validaciones
+    validarTexto,
+    validarNumeroPositivo,
+    validarEmail,
+    
+    // Búsquedas
+    buscarLibroPorId,
+    buscarLibrosPorTitulo,
+    buscarLibrosPorCategoria,
+    buscarUsuarioPorId,
+    buscarUsuariosPorNombre,
+    buscarPrestamoPorId,
+    
+    // Cálculos
+    obtenerPrestamosActivos,
+    obtenerPrestamosVencidos,
+    obtenerLibrosDisponibles,
+    contarPrestamosPorUsuario,
+    obtenerLibroMasPrestado,
+    
+    // Utilidades
+    pausar,
+    limpiarConsola,
+    capitalizarTexto,
+    generarId,
+    mostrarLista
+}; 

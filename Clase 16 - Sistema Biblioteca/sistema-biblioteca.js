@@ -1,322 +1,226 @@
-const prompt = require('prompt-sync')({ sigint: true });
-const funciones = require('./funciones.js');
-const { Libro, Usuario, Prestamo } = require('./clases.js');
-const {
-    cargarLibrosIniciales,
-    cargarUsuariosIniciales,
-    obtenerCategorias,
-    obtenerTiposUsuario
-} = require('./datos.js');
+/**
+ * FUNCIONES AUXILIARES - EJEMPLO SIMPLIFICADO
+ * ===========================================
+ * EJEMPLO RESUELTO PARA ESTUDIANTES
+ * 
+ * Funciones esenciales que muestran los conceptos clave
+ */
 
 // ======================================
-// VARIABLES GLOBALES DEL SISTEMA
+// FUNCIONES DE VALIDACIÓN
 // ======================================
 
-let libros = []
-let usuarios = []
-let prestamos = []
-let sistemaActivo = true;
+/**
+ * Valida que un texto no esté vacío
+ */
+function validarTexto(texto, minimo = 2) {
+    return texto && texto.trim().length >= minimo;
+}
 
-// ======================================
-// FUNCIÓN PRINCIPAL
-// ======================================
+/**
+ * Valida que un número sea positivo
+ */
+function validarNumeroPositivo(numero) {
+    const num = Number(numero);
+    return !isNaN(num) && num > 0;
+}
 
-function iniciarSistema() {
-    console.log("🏪 INICIANDO SISTEMA DE BIBLIOTECA...")
-
-    // Cargar datos iniciales
-    libros = cargarLibrosIniciales();
-    usuarios = cargarUsuariosIniciales();
-
-    // Mostrar menú principal
-    while (sistemaActivo) {
-        mostrarMenuPrincipal();
-    }
-
-    console.log("👋 ¡Gracias por usar el Sistema de Biblioteca!");
+/**
+ * Valida formato básico de email
+ */
+function validarEmail(email) {
+    return email && email.includes('@') && email.includes('.');
 }
 
 // ======================================
-// MENÚS DEL SISTEMA
+// FUNCIONES DE BÚSQUEDA
 // ======================================
 
-function mostrarMenuPrincipal() {
-    console.clear()
-    console.log("================================");
-    console.log("📚   SISTEMA DE BIBLIOTECA");
-    console.log("================================");
-    console.log("1. Gestión de Libros");
-    console.log("2. Gestión de Usuarios");
-    console.log("3. Gestión de Prestamos");
-    console.log("4. Reportes y Estadísticas");
-    console.log("5. Configuración");
-    console.log("0. Salir del Sistema");
-    console.log("================================");
+/**
+ * Busca un libro por ID
+ */
+function buscarLibroPorId(libros, id) {
+    return libros.find(libro => libro.id === Number(id)) || null;
+}
 
- const opcion = prompt("Seleccione una opción: ");
+/**
+ * Busca libros por título
+ */
+function buscarLibrosPorTitulo(libros, titulo) {
+    return libros.filter(libro => 
+        libro.titulo.toLowerCase().includes(titulo.toLowerCase())
+    );
+}
+
+/**
+ * Busca libros por categoría
+ */
+function buscarLibrosPorCategoria(libros, categoria) {
+    return libros.filter(libro => 
+        libro.categoria.toLowerCase() === categoria.toLowerCase()
+    );
+}
+
+/**
+ * Busca un usuario por ID
+ */
+function buscarUsuarioPorId(usuarios, id) {
+    return usuarios.find(usuario => usuario.id === Number(id)) || null;
+}
+
+/**
+ * Busca usuarios por nombre
+ */
+function buscarUsuariosPorNombre(usuarios, nombre) {
+    return usuarios.filter(usuario => 
+        usuario.nombre.toLowerCase().includes(nombre.toLowerCase())
+    );
+}
+
+/**
+ * Busca préstamo por ID
+ */
+function buscarPrestamoPorId(prestamos, id) {
+    return prestamos.find(prestamo => prestamo.id === Number(id)) || null;
+}
+
+// ======================================
+// FUNCIONES DE CÁLCULO
+// ======================================
+
+/**
+ * Obtiene préstamos activos
+ */
+function obtenerPrestamosActivos(prestamos) {
+    return prestamos.filter(prestamo => prestamo.estado === 'activo');
+}
+
+/**
+ * Obtiene préstamos vencidos
+ */
+function obtenerPrestamosVencidos(prestamos) {
+    return prestamos.filter(prestamo => prestamo.estaVencido());
+}
+
+/**
+ * Obtiene libros disponibles
+ */
+function obtenerLibrosDisponibles(libros) {
+    return libros.filter(libro => libro.hayDisponible());
+}
+
+/**
+ * Cuenta préstamos por usuario
+ */
+function contarPrestamosPorUsuario(prestamos) {
+    const conteo = {};
+    prestamos.forEach(prestamo => {
+        const userId = prestamo.usuario.id;
+        conteo[userId] = (conteo[userId] || 0) + 1;
+    });
+    return conteo;
+}
+
+/**
+ * Obtiene el libro más prestado
+ */
+function obtenerLibroMasPrestado(prestamos) {
+    if (prestamos.length === 0) return null;
     
-    switch (opcion) {
-        case '1':
-            menuLibros();
-            break;
-        case '2':
-            menuUsuarios();
-            break;
-        case '3':
-            menuPrestamos();
-            break;
-        case '4':
-            menuReportes();
-            break;
-        case '5':
-            menuConfiguracion();
-            break;
-        case '0':
-            sistemaActivo = false;
-            break;
-        default:
-            console.log("❌ Opción no válida. Intente nuevamente.");
-            funciones.pausar();
-    }
-}
+    const conteo = {};
+    prestamos.forEach(prestamo => {
+        const libroId = prestamo.libro.id;
+        conteo[libroId] = (conteo[libroId] || 0) + 1;
+    });
 
-function menuLibros() {
-  let volver = false;
-  do {
-    console.clear()
-    console.log("================================");
-    console.log("📚   GESTIÓN DE LIBROS");
-    console.log("================================");
-    console.log("1. Listar Libros");
-    console.log("2. Buscar Libros");
-    console.log("3. Agregar Libros");
-    console.log("0. Volver");
-    console.log("================================");
-
-    const opcion = prompt("Seleccione una opción: ");
+    let maxPrestamos = 0;
+    let libroMasPrestado = null;
     
-    switch (opcion) {
-        case '1':
-            listarLibros();
-            break;
-        case '2':
-            buscarLibros();
-            break;
-        case '3':
-            agregarLibros();
-            break;
-        case '0':
-            volver = true;
-            break;
-        default:
-            console.log("❌ Opción no válida. Intente nuevamente.");
-            funciones.pausar();
+    for (const [libroId, cantidad] of Object.entries(conteo)) {
+        if (cantidad > maxPrestamos) {
+            maxPrestamos = cantidad;
+            libroMasPrestado = prestamos.find(p => p.libro.id === Number(libroId))?.libro;
+        }
     }
-  } while (!volver);
-}
 
-function listarLibros() {
-  console.log("Listado de libros:")
-  console.log("===================")
-  if (libros.length === 0) {
-    console.log("❌ No hay libros registrados en el sistema.");
-  } else {
-    libros.forEach(libro => console.log(libro.mostrarInfo()));
-  }
-  funciones.pausar();
-}
-
-function buscarLibros() {
-  console.log('Buscar Libros:')
-  console.log("================")
-  console.log('1. Buscar por titulo')
-  console.log('2. Buscar por categoria')
-  const tipo = prompt("Seleccione tipo de búsqueda: ");
-  let resultados = []
-  switch (tipo) {
-    case '1':
-      const titulo = prompt("Introduce el título del libro a buscar: ");
-      resultados = funciones.buscarLibrosPorTitulo(libros, titulo);
-      break;
-    case '2':
-      console.log('Categorias disponibles: ' + obtenerCategorias().join(', '));
-      const categoria = prompt("Introduce la categoria del libro a buscar: ");
-      resultados = funciones.buscarLibrosPorCategoria(libros, categoria);
-      break;
-    default:
-      console.log("❌ Opción no válida.");
-  }
-
-  if (resultados.length === 0) {
-    console.log("❌ No hay libros que coincidan con la búsqueda.");
-  } else {
-    console.log("Resultados:")
-    console.log("============")
-    resultados.forEach(libro => console.log(libro.mostrarInfo()));
-  }
-  funciones.pausar();
-}
-
-function agregarLibros() {
-  console.log("\n➕ AGREGAR LIBRO:");
-  console.log("=================");
-
-  // Solicitar datos: titulo, autor, categoria, total
-  let titulo, autor, categoria, total;
-  do {
-    titulo = prompt("Introduce el título del libro: ");
-  } while (!funciones.validarTitulo(titulo));
-  do {
-    autor = prompt("Introduce el autor del libro: ");
-  } while (!funciones.validarAutor(autor));
-  do {
-    categoria = prompt("Introduce la categoria del libro: ");
-  } while (!funciones.validarCategoria(categoria));
-  do {
-    total = prompt("Introduce el total de libros disponibles: ");
-  } while (!funciones.validarTotal(total));
-
-  const nuevoID = libros.length + 1;
-  const nuevoLibro = new Libro(nuevoID, titulo, autor, categoria, total, total)
-  libros.push(nuevoLibro);
-  console.log("Libro agregado con éxito.");
-  console.log(nuevoLibro.mostrarInfo());
-  funciones.pausar();
-}
-
-function menuUsuarios() {
-  let volver = false;
-  do {
-    console.clear()
-    console.log("================================");
-    console.log("👥   GESTIÓN DE USUARIOS");
-    console.log("================================");
-    console.log("1. Listar Usuarios");
-    console.log("2. Buscar Usuario");
-    console.log("3. Agregar Usuario");
-    console.log("0. Volver");
-    console.log("================================");
-
-    const opcion = prompt("Seleccione una opción: ");
-    
-    switch (opcion) {
-        case '1':
-            listarUsuario();
-            break;
-        case '2':
-            buscarUsuario();
-            break;
-        case '3':
-            agregarUsuario();
-            break;
-        case '0':
-            volver = true;
-            break;
-        default:
-            console.log("❌ Opción no válida. Intente nuevamente.");
-            funciones.pausar();
-    }
-  } while (!volver);
-}
-
-function listarUsuario() {
-  console.log("🚧 Función en desarrollo...");
-  funciones.pausar();
-}
-
-function buscarUsuario() {
-  console.log("🚧 Función en desarrollo...");
-  funciones.pausar();
-}
-
-function agregarUsuario() {
-  console.log("🚧 Función en desarrollo...");
-  funciones.pausar();
-}
-
-function menuPrestamos() {
-   let volver = false;
-  do {
-    console.clear()
-    console.log("================================");
-    console.log("📋   GESTIÓN DE PRESTAMOS");
-    console.log("================================");
-    console.log("1. Realizar un Prestamo");
-    console.log("2. Devolver un libro");
-    console.log("3. Listar Prestamos Activos");
-    console.log("4. Ver Prestamos Vencidos");
-    console.log("0. Volver");
-    console.log("================================");
-
-    const opcion = prompt("Seleccione una opción: ");
-    
-    switch (opcion) {
-        case '1':
-            realizarPrestamo();
-            break;
-        case '2':
-            devolverLibro();
-            break;
-        case '3':
-            listarPrestamosActivos();
-            break;
-        case '4':
-            mostrarPrestamosVencidos();
-            break;
-        case '0':
-            volver = true;
-            break;
-        default:
-            console.log("❌ Opción no válida. Intente nuevamente.");
-            funciones.pausar();
-    }
-  } while (!volver);
-}
-
-function realizarPrestamo() {
-  console.log("🚧 Función en desarrollo...");
-  funciones.pausar();
-}
-
-function devolverLibro() {
-  console.log("🚧 Función en desarrollo...");
-  funciones.pausar();
-}
-
-function listarPrestamosActivos() {
-  console.log("🚧 Función en desarrollo...");
-  funciones.pausar();
-}
-
-function mostrarPrestamosVencidos() {
-  console.log("🚧 Función en desarrollo...");
-  funciones.pausar();
-}
-
-function menuReportes() {
-  console.clear()
-  console.log("================================");
-  console.log("📊   REPORTES Y ESTADÍSTICAS");
-  console.log("================================");
-
-  console.log('Total de Libros: ' + libros.length);
-  console.log('Total de Usuarios: ' + usuarios.length);
-  console.log('Total de Prestamos: ' + prestamos.length);
-  console.log('Prestamos Activos: ' + "Función en desarrollo...");
-  console.log('Prestamos Vencidos: ' + "Función en desarrollo...");
-  console.log('Libros disponibles: ' + "Función en desarrollo...");
-  console.log('Libro mas prestado: ' + "Función en desarrollo...");
-  console.log('Usuarios con mas prestamos: ' + "Función en desarrollo...");
-  funciones.pausar();
-}
-
-function menuConfiguracion() {
-    console.log("🚧 Función en desarrollo...");
-    funciones.pausar();
+    return { libro: libroMasPrestado, cantidad: maxPrestamos };
 }
 
 // ======================================
-// INICIAR APLICACIÓN
+// FUNCIONES DE UTILIDAD
 // ======================================
 
-iniciarSistema(); 
+/**
+ * Pausa la ejecución
+ */
+function pausar(mensaje = "\nPresiona Enter para continuar...") {
+    const prompt = require('prompt-sync')();
+    prompt(mensaje);
+}
+
+/**
+ * Limpia la consola
+ */
+function limpiarConsola() {
+    console.clear();
+}
+
+/**
+ * Capitaliza texto
+ */
+function capitalizarTexto(texto) {
+    return texto.charAt(0).toUpperCase() + texto.slice(1).toLowerCase();
+}
+
+/**
+ * Genera un ID único simple
+ */
+function generarId() {
+    return Date.now() + Math.floor(Math.random() * 100);
+}
+
+/**
+ * Muestra una lista simple
+ */
+function mostrarLista(items, mostrarInfo = (item) => item.toString()) {
+    if (items.length === 0) {
+        console.log("❌ No hay elementos para mostrar.");
+        return;
+    }
+
+    items.forEach((item, index) => {
+        console.log(`${index + 1}. ${mostrarInfo(item)}`);
+    });
+}
+
+// ======================================
+// EXPORTAR FUNCIONES
+// ======================================
+module.exports = {
+    // Validaciones
+    validarTexto,
+    validarNumeroPositivo,
+    validarEmail,
+    
+    // Búsquedas
+    buscarLibroPorId,
+    buscarLibrosPorTitulo,
+    buscarLibrosPorCategoria,
+    buscarUsuarioPorId,
+    buscarUsuariosPorNombre,
+    buscarPrestamoPorId,
+    
+    // Cálculos
+    obtenerPrestamosActivos,
+    obtenerPrestamosVencidos,
+    obtenerLibrosDisponibles,
+    contarPrestamosPorUsuario,
+    obtenerLibroMasPrestado,
+    
+    // Utilidades
+    pausar,
+    limpiarConsola,
+    capitalizarTexto,
+    generarId,
+    mostrarLista
+}; 
